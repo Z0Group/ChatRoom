@@ -130,6 +130,27 @@ body {
   align-items: center;
   gap: 8px;
 }
+.topbar-link-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.topbar-link-btn svg {
+  display: block;
+}
+.topbar-link-btn:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
 .stat {
   display: flex;
   align-items: center;
