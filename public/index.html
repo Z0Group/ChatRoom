@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0b0d14" />
+  <meta name="description" content="2Z0 — Anonymous, auto-moderated chatrooms based on your interests. No accounts, no tracking, end-to-end encrypted private rooms." />
+  <title>2Z0 Chatroom</title>
+  <link rel="stylesheet" href="/style.css?v=11" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c5cff'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-family='Arial' font-size='18' font-weight='bold' fill='white'%3E2Z%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="bg-gradient" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo">2Z</span>
+      <span class="brand-name">Chatroom</span>
+    </div>
+    <div class="topbar-stats">
+      <span class="stat" id="online-stat" title="People online">
+        <span class="stat-dot"></span>
+        <span id="online-count">0</span> online
+      </span>
+      <button id="rules-btn" class="icon-btn" type="button" aria-label="Rules" title="Rules">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      </button>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle theme" title="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button id="sound-toggle" class="icon-btn" type="button" aria-label="Toggle sound" title="Toggle sound">
+        <svg id="sound-on-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="sound-off-icon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button id="filter-toggle" class="icon-btn" type="button" aria-label="Toggle profanity filter" title="Profanity filter: ON">
+        <svg id="filter-on-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        <svg id="filter-off-icon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- JOIN SCREEN -->
+    <section id="join-screen" class="screen">
+      <div class="hero">
+        <h1 class="hero-title">Meet people who <span class="accent">get you</span></h1>
+        <p class="hero-subtitle">Join interest-based rooms. Be kind. Auto-moderated, no accounts, no tracking.</p>
+      </div>
+
+      <div id="invite-banner" class="invite-banner hidden">
+        <div class="invite-banner-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="invite-banner-body">
+          <strong>You've been invited to a private 1-on-1</strong>
+          <p>Room <code id="invite-code-display"></code> · Enter your nickname and click join.</p>
+        </div>
+        <button type="button" id="invite-cancel" class="link">Cancel</button>
+      </div>
+
+      <div class="card glass join-card">
+        <div class="field">
+          <label for="nickname">Your nickname</label>
+          <div class="input-wrap">
+            <input id="nickname" type="text" maxlength="24" autocomplete="off" placeholder="e.g. blue_owl" />
+            <div id="avatar-preview" class="avatar avatar-lg" aria-hidden="true">?</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="interest-input">Your interests</label>
+          <div class="tag-input">
+            <div id="interest-tags" class="tags" aria-live="polite"></div>
+            <input id="interest-input" type="text" maxlength="30" autocomplete="off" placeholder="Type and press Enter…" />
+          </div>
+          <div class="suggestions">
+            <span class="suggestions-label">Try:</span>
+            <button type="button" class="chip" data-suggest="coding">coding</button>
+            <button type="button" class="chip" data-suggest="music">music</button>
+            <button type="button" class="chip" data-suggest="gaming">gaming</button>
+            <button type="button" class="chip" data-suggest="anime">anime</button>
+            <button type="button" class="chip" data-suggest="art">art</button>
+            <button type="button" class="chip" data-suggest="movies">movies</button>
+            <button type="button" class="chip" data-suggest="books">books</button>
+            <button type="button" class="chip" data-suggest="fitness">fitness</button>
+          </div>
+        </div>
+
+        <div class="join-actions">
+          <button id="join-btn" class="btn btn-primary btn-full" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span id="join-btn-label">Find me a room</span>
+          </button>
+          <div class="or-divider"><span>or start a private room</span></div>
+          <div class="private-group" style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+            <div class="private-options" style="margin-top: 0; padding-top: 0; border: none;">
+              <span class="muted small">Room size:</span>
+              <select id="room-capacity" class="input glass select-sm">
+                <option value="2">2 (1-on-1)</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5 people</option>
+                <option value="6">6 people</option>
+                <option value="8">8 people</option>
+                <option value="10">10 people</option>
+                <option value="12">12 people</option>
+              </select>
+            </div>
+            
+            <div class="private-choice">
+              <button id="create-private-btn" class="btn btn-ghost" type="button" title="Create a private room and share an invite link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Share a link
+              </button>
+              <button id="create-listed-btn" class="btn btn-ghost" type="button" title="Create a room that's listed in the lobby for anyone to join">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="12" cy="11" r="1"/></svg>
+                List in lobby
+              </button>
+            </div>
+          </div>
+        </div>
+        <p id="join-error" class="error" role="alert"></p>
+      </div>
+
+      <div class="card glass rooms-card">
+        <div class="rooms-header">
+          <div>
+            <h2 class="section-title">Open rooms</h2>
+            <p class="section-sub" id="trending-label">Live list of active rooms</p>
+          </div>
+          <button id="refresh-rooms" class="btn btn-ghost" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+            Refresh
+          </button>
+        </div>
+
+        <div id="trending-tags" class="trending-tags"></div>
+
+        <div class="room-filters" id="room-filters">
+          <button class="filter-btn active" data-filter="all">All Rooms</button>
+          <button class="filter-btn" data-filter="default">Default</button>
+          <button class="filter-btn" data-filter="private">Private (Listed)</button>
+        </div>
+
+        <ul id="room-list" class="room-list" aria-live="polite">
+          <li class="room-empty">
+            <div class="empty-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <p>No open rooms yet — be the first!</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CHAT SCREEN -->
+    <section id="chat-screen" class="screen hidden">
+      <div class="card glass chat-card">
+        <header class="chat-header">
+          <div class="chat-header-left">
+            <button id="back-btn" class="icon-btn" type="button" aria-label="Leave room">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="room-info-box">
+              <h3 id="room-title" class="chat-title">#general</h3>
+              <div class="meta-row">
+                <span id="room-meta" class="chat-meta">0 members</span>
+                <div id="encrypted-badge" class="encrypted-badge hidden" title="End-to-End Encrypted (Zero Knowledge)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 22 4"/></svg>
+                  <span>Secure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-header-right">
+            <button id="users-toggle" class="icon-btn" type="button" aria-label="Show users">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span id="user-count-badge" class="badge">0</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="chat-body">
+          <div class="chat-main">
+            <ul id="messages" aria-live="polite"></ul>
+            <div id="typing-indicator" class="typing-indicator hidden">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span id="typing-text"></span>
+            </div>
+          </div>
+          <aside id="users-panel">
+            <h3>In this room</h3>
+            <ul id="user-list"></ul>
+          </aside>
+        </div>
+
+        <div id="reply-bar" class="reply-bar hidden">
+          <div class="reply-bar-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+          </div>
+          <div class="reply-bar-body">
+            <span class="reply-bar-label">Replying to <strong id="reply-bar-name"></strong></span>
+            <span class="reply-bar-preview" id="reply-bar-preview"></span>
+          </div>
+          <button id="reply-cancel" class="icon-btn reply-bar-close" type="button" aria-label="Cancel reply">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="emoji-picker hidden" id="emoji-picker">
+          <div class="emoji-picker-grid" id="emoji-picker-grid"></div>
+        </div>
+
+        <form id="send-form" autocomplete="off">
+          <button id="emoji-btn" type="button" class="icon-btn emoji-btn" aria-label="Emoji picker">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          </button>
+          <input id="message-input" type="text" maxlength="500" placeholder="Say something nice…" />
+          <button type="submit" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          </button>
+        </form>
+        <p id="chat-error" class="error" role="alert"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Auto-moderated · No accounts · Ephemeral</span>
+    <span class="footer-sep">·</span>
+    <button type="button" class="link" id="rules-link">Community rules</button>
+  </footer>
+
+  <!-- SHARE PRIVATE ROOM MODAL -->
+  <div id="share-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content card glass">
+      <header class="modal-header">
+        <h2 id="share-title">Your private room is ready</h2>
+        <button class="icon-btn modal-close" type="button" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p class="share-intro">Share this link with <strong>one</strong> person. The room fits exactly 2 people and isn't listed publicly.</p>
+
+        <div class="share-code-box">
+          <span class="share-code-label">Room code</span>
+          <span id="share-code" class="share-code">------</span>
+        </div>
+
+        <label class="field-label">Invite link</label>
+        <div class="share-link-row">
+          <input id="share-link-input" type="text" readonly />
+          <button id="copy-link-btn" type="button" class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="copy-btn-label">Copy</span>
+          </button>
+        </div>
+
+        <p class="share-warn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Only share with someone you trust. All community rules still apply.
+        </p>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+        <button type="button" id="enter-private-btn" class="btn btn-primary">Enter room</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- RULES MODAL -->
+  <div id="rules-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="rules-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content card glass">
+      <header class="modal-header">
+        <h2 id="rules-title">Community rules</h2>
+        <button class="icon-btn modal-close" type="button" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <div class="modal-body">
+        <p class="rules-intro">2Z0 Chatroom is a friendly place to meet people who share your interests. To keep it that way, everyone agrees to a few rules. The system auto-enforces most of these.</p>
+
+        <ol class="rules-list">
+          <li>
+            <strong>Be kind.</strong>
+            <span>No harassment, hate speech, slurs, or targeted attacks of any kind.</span>
+          </li>
+          <li>
+            <strong>Keep it clean.</strong>
+            <span>Inappropriate, sexual, or violent content is not allowed. Profanity is auto-blocked.</span>
+          </li>
+          <li>
+            <strong>No links or contact info.</strong>
+            <span>URLs, bare domains, IPs, Discord/Telegram invites, and emails are auto-blocked to prevent phishing and spam.</span>
+          </li>
+          <li>
+            <strong>Don't spam.</strong>
+            <span>Rapid or repeated messages trigger a cooldown. Repeated flooding results in an automatic mute.</span>
+          </li>
+          <li>
+            <strong>Don't impersonate.</strong>
+            <span>Don't pretend to be someone else or misrepresent your identity.</span>
+          </li>
+          <li>
+            <strong>No personal info.</strong>
+            <span>Don't share your (or anyone else's) full name, address, phone, email, school, or workplace.</span>
+          </li>
+          <li>
+            <strong>Respect everyone.</strong>
+            <span>Different opinions are fine — personal attacks are not. Keep debates civil.</span>
+          </li>
+          <li>
+            <strong>Report issues.</strong>
+            <span>Leave any room that makes you uncomfortable. Messages are ephemeral and not stored.</span>
+          </li>
+        </ol>
+
+        <div class="rules-footer">
+          <h3>How auto-moderation works</h3>
+          <ul class="rules-bullets">
+            <li>Profanity filter on nicknames, interests, and messages</li>
+            <li>Link, domain, IP, and contact-info detection</li>
+            <li>Flood control (max 8 messages / 10 seconds)</li>
+            <li>Duplicate-message blocking</li>
+            <li>Repeated-character spam blocking</li>
+            <li>Auto-mute (60s) after repeat offenses</li>
+            <li>Per-IP connection limits</li>
+          </ul>
+        </div>
+
+        <p class="rules-note">By using 2Z0 Chatroom you agree to these rules. Violating them may result in being muted or disconnected.</p>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-primary modal-close">I understand</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <div id="dialog-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content card glass">
+      <div class="modal-body dialog-body">
+        <p id="dialog-msg"></p>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" id="dialog-cancel" class="btn btn-ghost">Cancel</button>
+        <button type="button" id="dialog-confirm" class="btn btn-primary">OK</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js?v=11"></script>
+</body>
+</html>
