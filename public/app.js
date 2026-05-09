@@ -215,7 +215,7 @@
     const keyMaterial = await crypto.subtle.importKey(
       'raw', encoder.encode(str), { name: 'HKDF' }, false, ['deriveKey']
     );
-    const saltBytes = encoder.encode(salt || '2z0-chatroom-v1');
+    const saltBytes = encoder.encode(salt || 'chatroom-v1');
     return crypto.subtle.deriveKey(
       { name: 'HKDF', hash: 'SHA-256', salt: saltBytes, info: encoder.encode('e2ee-msg') },
       keyMaterial,

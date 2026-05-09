@@ -1,5 +1,5 @@
 {
-  "name": "2z0-chatroom",
+  "name": "chatroom",
   "version": "1.0.0",
   "description": "Secure interest-based chatroom with auto-moderation",
   "main": "server.js",

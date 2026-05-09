@@ -1,6 +1,6 @@
-# 2Z0 Chatroom
+# ChatRoom
 
-2Z0 Chatroom is a real-time, interest-based chat app built with `Express` and `Socket.IO`.
+ChatRoom is a real-time, interest-based chat app built with `Express` and `Socket.IO`.
 It is designed around anonymous use (no accounts), lightweight moderation, and private room support.
 
 This README explains how the project is structured, how messages and rooms work, and how to run and customize it safely.

@@ -869,5 +869,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`2Z0 Chatroom listening on http://${HOST}:${PORT}`);
+  console.log(`ChatRoom listening on http://${HOST}:${PORT}`);
 });
